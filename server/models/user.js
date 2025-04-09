@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema(
         imageUrl:{type:String, required:true},
         enrolledCourses:[
             {
-                type: mangoose.Schema.Types.ObjectId,
+                type: mongoose.Schema.Types.ObjectId,
                 ref:'Course'
             }
         ],
