@@ -1,27 +1,29 @@
 import express from 'express'
 import cors from 'cors'
-import 'dotenv/config' 
+import 'dotenv/config'
 import connectDb from './configs/mongodb.js'
 import { clerkWebhooks } from './controllers/webhooks.js'
 
 const app = express()
 
-//databse Connection
-await connectDb()
+const startServer = async () => {
+  try {
+    await connectDb()
+    app.use(cors())
 
-//middleware
-app.use(cors())
+    app.get('/', (req, res) => {
+      res.send('API working')
+    })
 
+    app.post('/clerk', express.json(), clerkWebhooks)
 
-//routes
-app.get('/',(req,res)=>{
-    res.send("Api working")
-})
+    const PORT = process.env.PORT || 5000
+    app.listen(PORT, () => {
+      console.log(`Server running at PORT: ${PORT}`)
+    })
+  } catch (err) {
+    console.error('Failed to start server:', err)
+  }
+}
 
-app.post('/clerk', express.json(),clerkWebhooks)
-
-const PORT = process.env.PORT || 5000
-
-app.listen(PORT,()=>{
-    console.log(`Server running at PORT:${PORT}`)
-})
+startServer()
