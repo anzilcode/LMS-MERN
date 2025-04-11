@@ -6,24 +6,22 @@ import { clerkWebhooks } from './controllers/webhooks.js'
 
 const app = express()
 
-const startServer = async () => {
-  try {
-    await connectDb()
-    app.use(cors())
+// Database Connection
+await connectDb()
 
-    app.get('/', (req, res) => {
-      res.send('API working')
-    })
+// Middleware
+app.use(cors())
 
-    app.post('/clerk', express.json(), clerkWebhooks)
+// Routes
+app.get('/', (req, res) => res.send("Api working"))
 
-    const PORT = process.env.PORT || 5000
-    app.listen(PORT, () => {
-      console.log(`Server running at PORT: ${PORT}`)
-    })
-  } catch (err) {
-    console.error('Failed to start server:', err)
-  }
-}
+app.post('/clerk', express.json(), clerkWebhooks)
 
-startServer()
+//PORT
+const PORT = process.env.PORT || 5000
+
+
+app.listen(PORT, () =>{ 
+  console.log(`Server running at PORT:${PORT}`)
+})
+
